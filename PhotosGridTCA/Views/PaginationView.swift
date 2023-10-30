@@ -11,36 +11,48 @@ import SwiftUI
 struct PaginationView: View {
     @StateObject private var dataManager = DataManager()
     
-    let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 1)
+    let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 3)
        
     var body: some View {
         ZStack {
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVGrid(columns: columns, spacing: 6) {
-                    ForEach(dataManager.sections, id: \.self) { sectionRow in 
-                        Section(content: {
-                            ForEach(sectionRow.data) { row in
-                                Text("\(row.number)")
-                                    .onAppear(perform: {
-                                        /// Enable here to load more object
-                                        dataManager.loadMoreContentIfNeeded(currentSection: sectionRow, currentItem: row)
-                                    })
-                            }
-                        }, header: {
-                            Text(sectionRow.id)
-                                .foregroundStyle(.black)
-                                .padding(10)
-                        })
+            ScrollViewReader { scrollView in
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVGrid(columns: columns, spacing: 6) {
+                        ForEach(dataManager.sections, id: \.self) { sectionRow in
+                            Section(content: {
+                                ForEach(sectionRow.data) { row in
+                                    Text("\(row.number)")
+                                        .font(.largeTitle)
+                                        .foregroundStyle(.red)
+                                        .frame(width: 120, height: 120)
+                                        .background(.black)
+                                        
+                                        .onAppear(perform: {
+                                            /// Enable here to load more object
+//                                            dataManager.loadMoreContentIfNeeded(currentSection: sectionRow, currentItem: row)
+                                        })
+                                }
+                            }, header: {
+                                Text(sectionRow.id)
+                                    .foregroundStyle(.black)
+                                    .padding(10)
+                                    .id(sectionRow.id)
+                            })
+                        }
+                    }.animation(.easeIn, value: dataManager.sections)
+                }
+                .onChange(of: dataManager.currentSectionId, {
+                    scrollView.scrollTo(dataManager.currentSectionId, anchor: .top)
+                })
+            }
+
+                
+                HStack {
+                    Spacer()
+                    CustomScrubber { percentage in
+                        dataManager.scrubberTouched(percentage: percentage)
                     }
                 }
-            }
-            
-            HStack {
-                Spacer()
-                CustomScrubber { percentage in
-//                    $dataManager.scrubberTouched()
-                }
-            }
         }
     }
 }
@@ -62,6 +74,9 @@ class DataManager: ObservableObject {
     private var currentPage = 0 // Keeps track of the page that we are currently on
     
     
+    let debouncer = Debouncer(delay: 0.5)
+    
+    
     @Published var sections: [SectionData] = [] // TODO: Create Date section in order to do paginaton // should be identified array
     var firstSnapshotOfData: [SectionData] = []
     // MARK: Underline data
@@ -69,6 +84,9 @@ class DataManager: ObservableObject {
     private var _underlinedData: [String:SectionData] = [String: SectionData]() // Represents our SQL where the whole data lays
     private let itemsPerSectionThershould = 20
     
+    private var disableLoadingMoreContent = false
+    
+    @Published var currentSectionId: String = "0"
     
     init() {
         /// Generating SQL database
@@ -105,9 +123,14 @@ class DataManager: ObservableObject {
         return SectionData(id: "Section Number: \(Self.sectionNumber), totalCount:\(myDataArr.count)", header: "Count:\(myDataArr.count)", data: myDataArr)
     }
     
-    
+    var latestUpdateToRun: (SectionData, MyData)?
     func loadMoreContentIfNeeded(currentSection: SectionData, currentItem: MyData) {
-
+        
+        guard !disableLoadingMoreContent else {
+            latestUpdateToRun = (currentSection, currentItem)
+            return
+        }
+                
         guard let section = _underlinedData[currentSection.id] else { return }
         guard currentSection.data.last?.id == currentItem.id else {
             print("### not last item")
@@ -126,13 +149,9 @@ class DataManager: ObservableObject {
                 return
             }
             print("### Appending 50")
-            //            self.sections[indexSection].data += appendDiff
-            
             var copySections = self.sections
             copySections[indexSection].data += appendDiff
             self.sections = copySections
-
-            
             return
         }
         let calculateThreshould = currentSection.data.count + itemsPerSectionThershould
@@ -148,9 +167,21 @@ class DataManager: ObservableObject {
     }
     
     func scrubberTouched(percentage: CGFloat) {
-        let sectionTarget = percentage * CGFloat(_underlinedData.count)
+        disableLoadingMoreContent = true
+        let sectionTarget = Int(percentage * CGFloat(_underlinedData.count - 1))
+        print("$$$ trying to:\(sectionTarget)")
         self.sections = firstSnapshotOfData
+        currentSectionId = self.sections[sectionTarget].id
         
+        debouncer.debounce {
+            DispatchQueue.main.async {
+                self.disableLoadingMoreContent = false
+                guard let latestUpdateToRun = self.latestUpdateToRun else {
+                    return
+              }
+                self.loadMoreContentIfNeeded(currentSection: latestUpdateToRun.0, currentItem: latestUpdateToRun.1)
+            }
+        }
     }
 }
 
@@ -181,4 +212,32 @@ struct MyData: Identifiable, Hashable {
         hasher.combine(number)
     }
     
+}
+
+
+
+
+class Debouncer {
+    // The amount of time to wait before the action is performed
+    private let delay: TimeInterval
+
+    // The work item that performs the action
+    private var workItem: DispatchWorkItem?
+
+    init(delay: TimeInterval) {
+        self.delay = delay
+    }
+
+    // Call this function to debounce the action
+    func debounce(action: @escaping () -> Void) {
+        // Cancel the currently pending item
+        workItem?.cancel()
+
+        // Wrap the action in a new work item
+        let newWorkItem = DispatchWorkItem(block: action)
+        workItem = newWorkItem
+
+        // Execute the work item after 'delay' seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: newWorkItem)
+    }
 }
