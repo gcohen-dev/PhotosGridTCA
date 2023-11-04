@@ -17,8 +17,8 @@ struct PhotosGridTCAApp: App {
     var body: some Scene {
         WindowGroup {
             
-            
-            TabFeatureView(store: Store(initialState: AppFeature.State(), reducer: {
+            RootView(store: Store(initialState: AppFeature.State(paginationConcept: Self.prefetchPaginationConceptState()),
+                                        reducer: {
                 AppFeature()
                 //                    ._printChanges()
             }))
@@ -26,6 +26,12 @@ struct PhotosGridTCAApp: App {
             // Test Pagination
 //            TestView()
         }
+    }
+    
+    static func prefetchPaginationConceptState() -> PaginationConceptFeature.State {
+        let firstTimeSnapshot = DataGenerator.getFirstSnapshotOfData()
+        let state = PaginationConceptFeature.State(firstSnapshotOfData: firstTimeSnapshot, sections: firstTimeSnapshot)
+        return state
     }
 }
 

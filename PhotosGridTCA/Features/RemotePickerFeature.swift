@@ -14,9 +14,10 @@ struct RemotePickerFeature: Reducer {
         var currentPhotoIndex = 0
         var isLoadingPhotosCounter = 0
         var photos: IdentifiedArrayOf<PhotoModel> = IdentifiedArrayOf<PhotoModel>()
+        @BindingState var scrollPosition: String?
     }
     
-    enum Action: Equatable {
+    enum Action: BindableAction, Equatable {
         case viewAppeared
         case updatedBatch(IdentifiedArrayOf<PhotoModel>)
         case addImages(Options)
@@ -25,6 +26,7 @@ struct RemotePickerFeature: Reducer {
         case removeImage(PhotoModel)
         case removeImages(Options)
         case random
+        case binding(BindingAction<State>)
     }
     
     enum CancelID: Hashable {
@@ -34,7 +36,7 @@ struct RemotePickerFeature: Reducer {
     @Dependency(\.generatorClient) var generatorClient
     
     var body: some ReducerOf<Self> {
-      
+        BindingReducer()
         Reduce { state, action in
 
             switch action {
@@ -82,7 +84,7 @@ struct RemotePickerFeature: Reducer {
                 let end = start + options.amount
                 state.currentPhotoIndex = end
 
-                return .merge( .cancel(id: CancelID.cancelSort), // Cont
+                return .concatenate( .cancel(id: CancelID.cancelSort), 
                                .run {  [start , end] send in
                                    let photos = await generatorClient.start(start,end)
                                    await send(.append(photos))
@@ -107,6 +109,8 @@ struct RemotePickerFeature: Reducer {
             case .random:
                 let shuffled = state.photos.shuffled()
                 state.photos = IdentifiedArrayOf(uniqueElements: shuffled)
+                return .none
+            case .binding:
                 return .none
             }
         }

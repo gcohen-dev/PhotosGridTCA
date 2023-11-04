@@ -8,10 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		A718D6122AEE4D3C00B7B3C0 /* RemotePickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6112AEE4D3C00B7B3C0 /* RemotePickerFeature.swift */; };
-		A718D6142AEE4EF800B7B3C0 /* TabFeatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6132AEE4EF800B7B3C0 /* TabFeatureView.swift */; };
+		A718D6142AEE4EF800B7B3C0 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6132AEE4EF800B7B3C0 /* RootView.swift */; };
 		A718D6172AEE5E7600B7B3C0 /* CustomScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */; };
 		A718D6192AEE5EF500B7B3C0 /* PaginationScrubberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6182AEE5EF500B7B3C0 /* PaginationScrubberView.swift */; };
+		A718D61B2AF23E3700B7B3C0 /* ScrollToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D61A2AF23E3700B7B3C0 /* ScrollToView.swift */; };
 		A74895D52AE9463900B18F44 /* PhotosGridTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74895D42AE9463900B18F44 /* PhotosGridTCATests.swift */; };
+		A77A6A132AF27D06002964C1 /* ScrollToViewFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77A6A122AF27D06002964C1 /* ScrollToViewFeature.swift */; };
+		A77A6A152AF3A2AF002964C1 /* PaginationConceptTCAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77A6A142AF3A2AF002964C1 /* PaginationConceptTCAView.swift */; };
 		A780C5142AE9624500E38195 /* KnobScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780C5132AE9624500E38195 /* KnobScrubber.swift */; };
 		A780C5162AE9874200E38195 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780C5152AE9874200E38195 /* Constants.swift */; };
 		A780C5192AEA4CD800E38195 /* AddOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780C5182AEA4CD800E38195 /* AddOptions.swift */; };
@@ -41,11 +44,14 @@
 
 /* Begin PBXFileReference section */
 		A718D6112AEE4D3C00B7B3C0 /* RemotePickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePickerFeature.swift; sourceTree = "<group>"; };
-		A718D6132AEE4EF800B7B3C0 /* TabFeatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabFeatureView.swift; sourceTree = "<group>"; };
+		A718D6132AEE4EF800B7B3C0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrubber.swift; sourceTree = "<group>"; };
 		A718D6182AEE5EF500B7B3C0 /* PaginationScrubberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationScrubberView.swift; sourceTree = "<group>"; };
+		A718D61A2AF23E3700B7B3C0 /* ScrollToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToView.swift; sourceTree = "<group>"; };
 		A74895D22AE9463900B18F44 /* PhotosGridTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotosGridTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74895D42AE9463900B18F44 /* PhotosGridTCATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosGridTCATests.swift; sourceTree = "<group>"; };
+		A77A6A122AF27D06002964C1 /* ScrollToViewFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToViewFeature.swift; sourceTree = "<group>"; };
+		A77A6A142AF3A2AF002964C1 /* PaginationConceptTCAView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationConceptTCAView.swift; sourceTree = "<group>"; };
 		A780C5132AE9624500E38195 /* KnobScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnobScrubber.swift; sourceTree = "<group>"; };
 		A780C5152AE9874200E38195 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A780C5182AEA4CD800E38195 /* AddOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOptions.swift; sourceTree = "<group>"; };
@@ -114,9 +120,12 @@
 				A780C51A2AEBA30100E38195 /* PaginationView.swift */,
 				A7E9F3732AE83B360051840A /* RemotePickerView.swift */,
 				A780C5132AE9624500E38195 /* KnobScrubber.swift */,
-				A718D6132AEE4EF800B7B3C0 /* TabFeatureView.swift */,
+				A718D6132AEE4EF800B7B3C0 /* RootView.swift */,
 				A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */,
 				A718D6182AEE5EF500B7B3C0 /* PaginationScrubberView.swift */,
+				A718D61A2AF23E3700B7B3C0 /* ScrollToView.swift */,
+				A77A6A122AF27D06002964C1 /* ScrollToViewFeature.swift */,
+				A77A6A142AF3A2AF002964C1 /* PaginationConceptTCAView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -291,15 +300,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				A718D6172AEE5E7600B7B3C0 /* CustomScrubber.swift in Sources */,
-				A718D6142AEE4EF800B7B3C0 /* TabFeatureView.swift in Sources */,
+				A718D61B2AF23E3700B7B3C0 /* ScrollToView.swift in Sources */,
+				A718D6142AEE4EF800B7B3C0 /* RootView.swift in Sources */,
 				A780C5192AEA4CD800E38195 /* AddOptions.swift in Sources */,
 				A7E9F38D2AE83D8B0051840A /* AppFeature.swift in Sources */,
+				A77A6A152AF3A2AF002964C1 /* PaginationConceptTCAView.swift in Sources */,
 				A718D6192AEE5EF500B7B3C0 /* PaginationScrubberView.swift in Sources */,
 				A7E9F38F2AE83F590051840A /* Generators.swift in Sources */,
 				A7E9F3742AE83B360051840A /* RemotePickerView.swift in Sources */,
 				A780C51B2AEBA30100E38195 /* PaginationView.swift in Sources */,
 				A780C5142AE9624500E38195 /* KnobScrubber.swift in Sources */,
 				A7E9F3722AE83B360051840A /* PhotosGridTCAApp.swift in Sources */,
+				A77A6A132AF27D06002964C1 /* ScrollToViewFeature.swift in Sources */,
 				A718D6122AEE4D3C00B7B3C0 /* RemotePickerFeature.swift in Sources */,
 				A780C5162AE9874200E38195 /* Constants.swift in Sources */,
 			);

@@ -17,7 +17,7 @@ enum Options: Equatable {
     
     var amount: Int {
         switch self {
-        case .firstBatch: return 250_000 //20 //250_000 //500_000
+        case .firstBatch: return 20 //20 //250_000 //500_000
         case .small: return 1_000
         case .medium: return 5_000
         case .large: return 10_000

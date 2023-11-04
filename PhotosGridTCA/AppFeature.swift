@@ -10,33 +10,39 @@ import ComposableArchitecture
 
 struct AppFeature: Reducer {
     
-    enum Tab { case remote, local, paginationConcept }
-    
     struct State: Equatable {
+        var paginationConcept: PaginationConceptFeature.State = PaginationConceptFeature.State()
         var remotePicker: RemotePickerFeature.State = RemotePickerFeature.State()
-        var selectedTab: Tab = .paginationConcept
+        var scrollViewFeature: ScrollToViewFeature.State = ScrollToViewFeature.State()
     }
     
     enum Action: Equatable {
-        case tabSelected(Tab)
         case remotePickerActions(RemotePickerFeature.Action)
+        case scrollViewFeature(ScrollToViewFeature.Action)
+        case paginationConcept(PaginationConceptFeature.Action)
     }
     
     
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .remotePickerActions:
+            case .paginationConcept:
                 return .none
-            case .tabSelected(let tab):
-                state.selectedTab = tab
+            case .scrollViewFeature:
+                return .none
+            case .remotePickerActions:
                 return .none
             }
         }
-        Scope(state: \.remotePicker, 
+        Scope(state: \.paginationConcept, action: /Action.paginationConcept) {
+            PaginationConceptFeature()
+        }
+        Scope(state: \.remotePicker,
               action: /Action.remotePickerActions) {
             RemotePickerFeature()
         }
+        Scope(state: \.scrollViewFeature, action: /Action.scrollViewFeature) {
+            ScrollToViewFeature()
+        }
     }
-    
 }

@@ -20,6 +20,7 @@ struct CustomScrubber: View {
 
     // The action to perform when scrubbing. This closure can accept the current percentage of the scrub.
     var onScrub: ((CGFloat) -> Void)?
+    var onEnded: ((CGFloat) -> Void)?
 
     var body: some View {
         let dragGesture = DragGesture()
@@ -30,6 +31,13 @@ struct CustomScrubber: View {
                 // Calculate the current scrub percentage and call the action.
                 let scrubPercentage = knobPosition / (trackHeight - knobHeight)
                 onScrub?(scrubPercentage)
+            }.onEnded { value in
+                // Update the knob position while ensuring it doesn't exceed the bounds of the track.
+                knobPosition = min(max(0, value.location.y - (knobHeight / 2)), trackHeight - knobHeight)
+
+                // Calculate the current scrub percentage and call the action.
+                let scrubPercentage = knobPosition / (trackHeight - knobHeight)
+                onEnded?(scrubPercentage)
             }
 
         return VStack {
