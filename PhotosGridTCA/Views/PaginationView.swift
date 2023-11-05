@@ -46,10 +46,11 @@ struct PaginationView: View {
                     
                 }
                 .scrollIndicators(.never)
-                .scrollPosition(id: $dataManager.scrollToSectionData)
-                .onChange(of: dataManager.currentSectionId, {
-                    scrollView.scrollTo(dataManager.currentSectionId, anchor: .top)
-                })
+//                .scrollPosition(id: $dataManager.scrollToSectionData)
+                .task(id: dataManager.currentSectionId) {
+                    try? await Task.sleep(for:.seconds(0.05))
+                        scrollView.scrollTo(dataManager.currentSectionId, anchor: .top)
+                }
                 .onChange(of: dataManager.sections, initial: true) { oldValue, newValue in
                     if let currentSection = dataManager.scrollToSectionData,
                        let currentIndex = newValue.firstIndex(of: currentSection)
@@ -68,9 +69,10 @@ struct PaginationView: View {
             HStack {
                 Spacer()
                 CustomScrubber(onScrub: { percentage in
-                    dataManager.scrubberTouched(percentage: percentage)
-                }, onEnded: { percentage in
                     dataManager.scrubberTouchedEnded(percentage: percentage)
+//                    dataManager.scrubberTouched(percentage: percentage)
+                }, onEnded: { percentage in
+//                    dataManager.scrubberTouchedEnded(percentage: percentage)
                 })
             }
         }
@@ -91,7 +93,7 @@ class ViewModel: ObservableObject {
     @Published var isScrubberInUsed = false
     @Published var currentSectionId: String = "0"
     @Published var scrollToSectionData: SectionData?
-    
+    var lastSectionTarget: Int?
     
     /// Represent the partial of the data, all sections will be here and also the first and last 20 items of each section
     private var firstSnapshotOfData: [SectionData] = []
@@ -227,24 +229,40 @@ class ViewModel: ObservableObject {
         self.sections[indexSection].data = underlinedSection.data
     }
     
-    func scrubberTouched(percentage: CGFloat) {
-        let sectionTarget = Int(percentage * CGFloat(_underlinedData.count - 1))
-        if !isScrubberInUsed {
-            self.sections = firstSnapshotOfData
-        }
-        isScrubberInUsed = true
-        if currentSectionId != self.sections[sectionTarget].id {
-            currentSectionId = self.sections[sectionTarget].id
-        }
-    }
+//    func scrubberTouched(percentage: CGFloat) {
+//        let sectionTarget = Int(percentage * CGFloat(_underlinedData.count - 1))
+//        if !isScrubberInUsed {
+//            self.sections = firstSnapshotOfData
+//        }
+//        isScrubberInUsed = true
+//        if currentSectionId != self.sections[sectionTarget].id {
+//            currentSectionId = self.sections[sectionTarget].id
+//        }
+//    }
     
     func scrubberTouchedEnded(percentage: CGFloat) {
+        print("try load")
         let sectionTarget = Int(percentage * CGFloat(_underlinedData.count - 1))
-        let firstSectionToUpdate = self.sections[sectionTarget]
-        let priorValue = max(sectionTarget - 1,0) /// incase we have section 0 as the first section
-        let priorSection = self.sections[priorValue]
-        self.loadSections(currentSections: [firstSectionToUpdate, priorSection], toId: firstSectionToUpdate.id)
-        self.isScrubberInUsed = false
+        guard sectionTarget != lastSectionTarget else {
+            return
+        }
+        print("reload data once \(sectionTarget)")
+        if !isScrubberInUsed {
+            sections = firstSnapshotOfData
+        }
+        isScrubberInUsed = true
+        if currentSectionId != sections[sectionTarget].id {
+            currentSectionId = sections[sectionTarget].id
+        }
+
+        let firstSectionToUpdate = sections[sectionTarget]
+        let priorValue = max(sectionTarget - 1, 0) /// incase we have section 0 as the first section
+        let priorSection = sections[priorValue]
+        loadSections(currentSections: [firstSectionToUpdate, priorSection], toId: firstSectionToUpdate.id)
+        isScrubberInUsed = false
+
+        lastSectionTarget = sectionTarget
+        scrollToSectionData = sections[sectionTarget]
     }
     
 }
