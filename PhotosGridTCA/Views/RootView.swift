@@ -27,11 +27,18 @@ struct RootView: View {
                         Text("Local TBA")
                     })
                     
-                    NavigationLink("Pagination View",
+                    NavigationLink("Pagination Dynamic Adding Concept",
                                    destination: {
-                        PaginationView()
-                            .navigationTitle("Pagination Concept")
+                        PaginationDynamicAddingView()
+                            .navigationTitle("Pagination Dynamic Adding Concept")
                     })
+                    
+                    NavigationLink("Pagination Placeholder Adding Concept",
+                                   destination: {
+                        PaginationPlaceHolderView()
+                            .navigationTitle("Pagination Placeholder Adding Concept")
+                    })
+                    
                     
                     
                     
