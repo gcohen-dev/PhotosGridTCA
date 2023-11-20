@@ -28,21 +28,18 @@ struct PaginationDynamicAddingView: View {
                                         .foregroundStyle(.red)
                                         .frame(width: 120, height: 120)
                                         .background(.black)
-                                        .onAppear(perform: {
-                                            /// Enable here to load more object
-                                            dataManager.loadEntireSectionIfNeeded(currentSection: sectionRow, row: row)
-                                        })
                                 }
                             }, header: {
                                 Text(sectionRow.header)
                                     .foregroundStyle(.black)
                                     .padding(25)
-                                    .id(sectionRow)
+//                                    .id(sectionRow)
                                     .background(Color.white)
                                     
                             })
                         }
                     }
+                    .scrollTargetLayout()
                     
                 }
                 .scrollIndicators(.never)
@@ -50,19 +47,6 @@ struct PaginationDynamicAddingView: View {
                 .onChange(of: dataManager.currentSectionId, {
                     scrollView.scrollTo(dataManager.currentSectionId, anchor: .top)
                 })
-                .onChange(of: dataManager.sections, initial: true) { oldValue, newValue in
-                    if let currentSection = dataManager.scrollToSectionData,
-                       let currentIndex = newValue.firstIndex(of: currentSection)
-                    //                        let newItem = newValue.indices.contains(currentIndex) ? newValue[currentIndex] : nil
-                    {
-                        dataManager.scrollToSectionData = newValue[currentIndex]
-                    } else {
-                        let newScrollPosition = dataManager.sections.count > 0 ? newValue[0] : nil
-                        if newScrollPosition != dataManager.scrollToSectionData {
-                            dataManager.scrollToSectionData = newScrollPosition
-                        }
-                    }
-                }
             }
             
             HStack {
@@ -109,7 +93,7 @@ extension PaginationDynamicAddingView {
             
             var orderedSection = [SectionData]()
             
-            for _ in 0...1119 { // 1199 Sections = 12 month * 100 Years.
+            for _ in 0...400 { // 1199 Sections = 12 month * 100 Years.
                 let section = generateUnderlineData()
                 orderedSection.append(section)
                 /// Generating SQL database here
@@ -154,33 +138,29 @@ extension PaginationDynamicAddingView {
                                data: myDataArr)
         }
         
-        private func loadSections(currentSections: [SectionData], toId: String) {
+        private func loadSection(currentSection: SectionData) {
             
-            for currentSection in currentSections {
-                if currentSection.isSectionLoaded {
-                    continue
-                }
-                
-                if currentSection.data.isEmpty {
-                    continue
-                }
-                
-                guard let underlinedSection = _underlinedData[currentSection.id] else {
-                    continue
-                }
-                
-                guard let indexSection = self.sections.firstIndex(of: currentSection) else {
-                    continue
-                }
-                
-                self.sections[indexSection].data = underlinedSection.data
-                self.sections[indexSection].isSectionLoaded = true
-                
+            
+            if currentSection.isSectionLoaded {
+                return
             }
             
-            if currentSections.first != scrollToSectionData {
-                scrollToSectionData = currentSections.first ?? nil
+            if currentSection.data.isEmpty {
+                return
             }
+            
+            guard let underlinedSection = _underlinedData[currentSection.id] else {
+                return
+            }
+            
+            guard let indexSection = self.sections.firstIndex(of: currentSection) else {
+                return
+            }
+            
+            self.sections[indexSection].isSectionLoaded = true
+            
+            self.sections[indexSection].data = underlinedSection.data
+
         }
         
         
@@ -243,7 +223,11 @@ extension PaginationDynamicAddingView {
             let firstSectionToUpdate = self.sections[sectionTarget]
             let priorValue = max(sectionTarget - 1,0) /// incase we have section 0 as the first section
             let priorSection = self.sections[priorValue]
-            self.loadSections(currentSections: [firstSectionToUpdate, priorSection], toId: firstSectionToUpdate.id)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { /// fetching for items might take a sec
+                self.loadSection(currentSection: firstSectionToUpdate)
+                self.loadSection(currentSection: priorSection)
+            }
+            
             self.isScrubberInUsed = false
         }
         

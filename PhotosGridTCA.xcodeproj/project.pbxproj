@@ -11,6 +11,7 @@
 		A718D6142AEE4EF800B7B3C0 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6132AEE4EF800B7B3C0 /* RootView.swift */; };
 		A718D6172AEE5E7600B7B3C0 /* CustomScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */; };
 		A718D61B2AF23E3700B7B3C0 /* ScrollToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D61A2AF23E3700B7B3C0 /* ScrollToView.swift */; };
+		A72C56F72AFA624000CEC3EA /* AddExperimentItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72C56F62AFA624000CEC3EA /* AddExperimentItemsView.swift */; };
 		A74895D52AE9463900B18F44 /* PhotosGridTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74895D42AE9463900B18F44 /* PhotosGridTCATests.swift */; };
 		A77A6A132AF27D06002964C1 /* ScrollToViewFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77A6A122AF27D06002964C1 /* ScrollToViewFeature.swift */; };
 		A77A6A152AF3A2AF002964C1 /* PaginationConceptTCAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77A6A142AF3A2AF002964C1 /* PaginationConceptTCAView.swift */; };
@@ -19,6 +20,16 @@
 		A780C5162AE9874200E38195 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780C5152AE9874200E38195 /* Constants.swift */; };
 		A780C5192AEA4CD800E38195 /* AddOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780C5182AEA4CD800E38195 /* AddOptions.swift */; };
 		A780C51B2AEBA30100E38195 /* PaginationDynamicAddingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A780C51A2AEBA30100E38195 /* PaginationDynamicAddingView.swift */; };
+		A7E3CAC82B0A13EC0055AFE6 /* ColorsInMemeoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CAC72B0A13EC0055AFE6 /* ColorsInMemeoryView.swift */; };
+		A7E3CACB2B0A66880055AFE6 /* SectionCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CACA2B0A66880055AFE6 /* SectionCollection.swift */; };
+		A7E3CACD2B0A66B50055AFE6 /* PhotoAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CACC2B0A66B50055AFE6 /* PhotoAssetCollection.swift */; };
+		A7E3CACF2B0A66D80055AFE6 /* PhotoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CACE2B0A66D80055AFE6 /* PhotoAsset.swift */; };
+		A7E3CAD12B0A67200055AFE6 /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CAD02B0A67200055AFE6 /* PhotoLibrary.swift */; };
+		A7E3CAD32B0A67400055AFE6 /* PhotoSectioned.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CAD22B0A67400055AFE6 /* PhotoSectioned.swift */; };
+		A7E3CAD52B0A67670055AFE6 /* CachedImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CAD42B0A67670055AFE6 /* CachedImageManager.swift */; };
+		A7E3CAD72B0A67E90055AFE6 /* SectionCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CAD62B0A67E90055AFE6 /* SectionCollectionView.swift */; };
+		A7E3CAD92B0A68110055AFE6 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CAD82B0A68110055AFE6 /* PhotoView.swift */; };
+		A7E3CADB2B0A682E0055AFE6 /* PhotoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3CADA2B0A682E0055AFE6 /* PhotoItemView.swift */; };
 		A7E9F3722AE83B360051840A /* PhotosGridTCAApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E9F3712AE83B360051840A /* PhotosGridTCAApp.swift */; };
 		A7E9F3742AE83B360051840A /* RemotePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E9F3732AE83B360051840A /* RemotePickerView.swift */; };
 		A7E9F3762AE83B370051840A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7E9F3752AE83B370051840A /* Assets.xcassets */; };
@@ -47,6 +58,7 @@
 		A718D6132AEE4EF800B7B3C0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrubber.swift; sourceTree = "<group>"; };
 		A718D61A2AF23E3700B7B3C0 /* ScrollToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToView.swift; sourceTree = "<group>"; };
+		A72C56F62AFA624000CEC3EA /* AddExperimentItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExperimentItemsView.swift; sourceTree = "<group>"; };
 		A74895D22AE9463900B18F44 /* PhotosGridTCATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotosGridTCATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A74895D42AE9463900B18F44 /* PhotosGridTCATests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosGridTCATests.swift; sourceTree = "<group>"; };
 		A77A6A122AF27D06002964C1 /* ScrollToViewFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollToViewFeature.swift; sourceTree = "<group>"; };
@@ -56,6 +68,17 @@
 		A780C5152AE9874200E38195 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A780C5182AEA4CD800E38195 /* AddOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOptions.swift; sourceTree = "<group>"; };
 		A780C51A2AEBA30100E38195 /* PaginationDynamicAddingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginationDynamicAddingView.swift; sourceTree = "<group>"; };
+		A7E3CAC72B0A13EC0055AFE6 /* ColorsInMemeoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsInMemeoryView.swift; sourceTree = "<group>"; };
+		A7E3CACA2B0A66880055AFE6 /* SectionCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCollection.swift; sourceTree = "<group>"; };
+		A7E3CACC2B0A66B50055AFE6 /* PhotoAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetCollection.swift; sourceTree = "<group>"; };
+		A7E3CACE2B0A66D80055AFE6 /* PhotoAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAsset.swift; sourceTree = "<group>"; };
+		A7E3CAD02B0A67200055AFE6 /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
+		A7E3CAD22B0A67400055AFE6 /* PhotoSectioned.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSectioned.swift; sourceTree = "<group>"; };
+		A7E3CAD42B0A67670055AFE6 /* CachedImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageManager.swift; sourceTree = "<group>"; };
+		A7E3CAD62B0A67E90055AFE6 /* SectionCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCollectionView.swift; sourceTree = "<group>"; };
+		A7E3CAD82B0A68110055AFE6 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
+		A7E3CADA2B0A682E0055AFE6 /* PhotoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItemView.swift; sourceTree = "<group>"; };
+		A7E3CADC2B0A74050055AFE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A7E9F36E2AE83B360051840A /* PhotosGridTCA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosGridTCA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7E9F3712AE83B360051840A /* PhotosGridTCAApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosGridTCAApp.swift; sourceTree = "<group>"; };
 		A7E9F3732AE83B360051840A /* RemotePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePickerView.swift; sourceTree = "<group>"; };
@@ -117,6 +140,7 @@
 		A780C5122AE9623400E38195 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A7E3CAC92B0A60490055AFE6 /* LocalLibrarySectioned */,
 				A780C51A2AEBA30100E38195 /* PaginationDynamicAddingView.swift */,
 				A7E9F3732AE83B360051840A /* RemotePickerView.swift */,
 				A780C5132AE9624500E38195 /* KnobScrubber.swift */,
@@ -126,6 +150,8 @@
 				A77A6A122AF27D06002964C1 /* ScrollToViewFeature.swift */,
 				A77A6A142AF3A2AF002964C1 /* PaginationConceptTCAView.swift */,
 				A77A6A312AF7B1C2002964C1 /* PaginationPlaceHolderView.swift */,
+				A72C56F62AFA624000CEC3EA /* AddExperimentItemsView.swift */,
+				A7E3CAC72B0A13EC0055AFE6 /* ColorsInMemeoryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -136,6 +162,22 @@
 				A780C5182AEA4CD800E38195 /* AddOptions.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		A7E3CAC92B0A60490055AFE6 /* LocalLibrarySectioned */ = {
+			isa = PBXGroup;
+			children = (
+				A7E3CACA2B0A66880055AFE6 /* SectionCollection.swift */,
+				A7E3CACC2B0A66B50055AFE6 /* PhotoAssetCollection.swift */,
+				A7E3CACE2B0A66D80055AFE6 /* PhotoAsset.swift */,
+				A7E3CAD02B0A67200055AFE6 /* PhotoLibrary.swift */,
+				A7E3CAD22B0A67400055AFE6 /* PhotoSectioned.swift */,
+				A7E3CAD42B0A67670055AFE6 /* CachedImageManager.swift */,
+				A7E3CAD62B0A67E90055AFE6 /* SectionCollectionView.swift */,
+				A7E3CAD82B0A68110055AFE6 /* PhotoView.swift */,
+				A7E3CADA2B0A682E0055AFE6 /* PhotoItemView.swift */,
+			);
+			path = LocalLibrarySectioned;
 			sourceTree = "<group>";
 		};
 		A7E9F3652AE83B360051840A = {
@@ -159,6 +201,7 @@
 		A7E9F3702AE83B360051840A /* PhotosGridTCA */ = {
 			isa = PBXGroup;
 			children = (
+				A7E3CADC2B0A74050055AFE6 /* Info.plist */,
 				A718D6152AEE56D300B7B3C0 /* Misc */,
 				A718D6102AEE4D2D00B7B3C0 /* Features */,
 				A780C5172AEA4C8A00E38195 /* Models */,
@@ -299,14 +342,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7E3CADB2B0A682E0055AFE6 /* PhotoItemView.swift in Sources */,
+				A7E3CACF2B0A66D80055AFE6 /* PhotoAsset.swift in Sources */,
+				A7E3CAD92B0A68110055AFE6 /* PhotoView.swift in Sources */,
+				A7E3CAD52B0A67670055AFE6 /* CachedImageManager.swift in Sources */,
 				A718D6172AEE5E7600B7B3C0 /* CustomScrubber.swift in Sources */,
 				A718D61B2AF23E3700B7B3C0 /* ScrollToView.swift in Sources */,
 				A718D6142AEE4EF800B7B3C0 /* RootView.swift in Sources */,
 				A780C5192AEA4CD800E38195 /* AddOptions.swift in Sources */,
 				A7E9F38D2AE83D8B0051840A /* AppFeature.swift in Sources */,
+				A7E3CAD72B0A67E90055AFE6 /* SectionCollectionView.swift in Sources */,
+				A7E3CAD12B0A67200055AFE6 /* PhotoLibrary.swift in Sources */,
 				A77A6A152AF3A2AF002964C1 /* PaginationConceptTCAView.swift in Sources */,
+				A7E3CAC82B0A13EC0055AFE6 /* ColorsInMemeoryView.swift in Sources */,
+				A72C56F72AFA624000CEC3EA /* AddExperimentItemsView.swift in Sources */,
+				A7E3CACB2B0A66880055AFE6 /* SectionCollection.swift in Sources */,
 				A7E9F38F2AE83F590051840A /* Generators.swift in Sources */,
 				A7E9F3742AE83B360051840A /* RemotePickerView.swift in Sources */,
+				A7E3CACD2B0A66B50055AFE6 /* PhotoAssetCollection.swift in Sources */,
+				A7E3CAD32B0A67400055AFE6 /* PhotoSectioned.swift in Sources */,
 				A780C51B2AEBA30100E38195 /* PaginationDynamicAddingView.swift in Sources */,
 				A780C5142AE9624500E38195 /* KnobScrubber.swift in Sources */,
 				A7E9F3722AE83B360051840A /* PhotosGridTCAApp.swift in Sources */,
@@ -500,6 +554,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PhotosGridTCA/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library to show photos";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -538,6 +594,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PhotosGridTCA/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to the photo library to show photos";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
