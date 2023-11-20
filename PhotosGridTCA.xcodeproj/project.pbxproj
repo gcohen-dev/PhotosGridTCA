@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A701E7802B0B59EB00B3E16B /* SwiftDataExpirementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A701E77F2B0B59EB00B3E16B /* SwiftDataExpirementView.swift */; };
+		A701E7822B0B5A5300B3E16B /* ModelSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A701E7812B0B5A5300B3E16B /* ModelSwiftData.swift */; };
 		A718D6122AEE4D3C00B7B3C0 /* RemotePickerFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6112AEE4D3C00B7B3C0 /* RemotePickerFeature.swift */; };
 		A718D6142AEE4EF800B7B3C0 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6132AEE4EF800B7B3C0 /* RootView.swift */; };
 		A718D6172AEE5E7600B7B3C0 /* CustomScrubber.swift in Sources */ = {isa = PBXBuildFile; fileRef = A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */; };
@@ -54,6 +56,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A701E77F2B0B59EB00B3E16B /* SwiftDataExpirementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataExpirementView.swift; sourceTree = "<group>"; };
+		A701E7812B0B5A5300B3E16B /* ModelSwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSwiftData.swift; sourceTree = "<group>"; };
 		A718D6112AEE4D3C00B7B3C0 /* RemotePickerFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemotePickerFeature.swift; sourceTree = "<group>"; };
 		A718D6132AEE4EF800B7B3C0 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		A718D6162AEE5E7600B7B3C0 /* CustomScrubber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrubber.swift; sourceTree = "<group>"; };
@@ -112,6 +116,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A701E77E2B0B59BE00B3E16B /* SwiftDataExpirement */ = {
+			isa = PBXGroup;
+			children = (
+				A701E77F2B0B59EB00B3E16B /* SwiftDataExpirementView.swift */,
+				A701E7812B0B5A5300B3E16B /* ModelSwiftData.swift */,
+			);
+			path = SwiftDataExpirement;
+			sourceTree = "<group>";
+		};
 		A718D6102AEE4D2D00B7B3C0 /* Features */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +153,7 @@
 		A780C5122AE9623400E38195 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A701E77E2B0B59BE00B3E16B /* SwiftDataExpirement */,
 				A7E3CAC92B0A60490055AFE6 /* LocalLibrarySectioned */,
 				A780C51A2AEBA30100E38195 /* PaginationDynamicAddingView.swift */,
 				A7E9F3732AE83B360051840A /* RemotePickerView.swift */,
@@ -348,6 +362,7 @@
 				A7E3CAD52B0A67670055AFE6 /* CachedImageManager.swift in Sources */,
 				A718D6172AEE5E7600B7B3C0 /* CustomScrubber.swift in Sources */,
 				A718D61B2AF23E3700B7B3C0 /* ScrollToView.swift in Sources */,
+				A701E7802B0B59EB00B3E16B /* SwiftDataExpirementView.swift in Sources */,
 				A718D6142AEE4EF800B7B3C0 /* RootView.swift in Sources */,
 				A780C5192AEA4CD800E38195 /* AddOptions.swift in Sources */,
 				A7E9F38D2AE83D8B0051840A /* AppFeature.swift in Sources */,
@@ -364,6 +379,7 @@
 				A780C51B2AEBA30100E38195 /* PaginationDynamicAddingView.swift in Sources */,
 				A780C5142AE9624500E38195 /* KnobScrubber.swift in Sources */,
 				A7E9F3722AE83B360051840A /* PhotosGridTCAApp.swift in Sources */,
+				A701E7822B0B5A5300B3E16B /* ModelSwiftData.swift in Sources */,
 				A77A6A322AF7B1C2002964C1 /* PaginationPlaceHolderView.swift in Sources */,
 				A77A6A132AF27D06002964C1 /* ScrollToViewFeature.swift in Sources */,
 				A718D6122AEE4D3C00B7B3C0 /* RemotePickerFeature.swift in Sources */,

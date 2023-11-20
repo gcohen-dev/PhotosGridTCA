@@ -14,15 +14,13 @@ struct ColorsInMemeoryView: View {
                                    GridItem(.flexible(), spacing: 0)]
     
     
-    let data: [SomeSection] = [SomeSection]()
+    @State var data: [SomeSection] = [SomeSection]()
     @State var scrollPosition: UUID? = nil
     @State var flashScrollView = false
     @State var section = ""
     
     var body: some View {
         ZStack(alignment: .topLeading) {
-            
-            //            ScrollViewReader { value in
             ScrollView {
                 LazyVGrid(columns: threeColumnGrid, alignment: .center, spacing: 0, pinnedViews: [.sectionHeaders]) {
                     ForEach(data) { section in
@@ -46,43 +44,41 @@ struct ColorsInMemeoryView: View {
                     }
                 }
                 .scrollTargetLayout()
-                
-                //                }
                 .onChange(of: data) {
                     flashScrollView.toggle()
-                    //                    Task {
-                    //                        try? await Task.sleep(for: .seconds(1))
-                    //                        value.scrollTo(data.last?.items.last?.id)
-                    
-                    //                    }
-                    //                    value.scrollTo(data.last?.items.last?.id)
-                    
-                    //                        scrollPosition = data.last?.items.last?.id
-                    
-                    //                    scrollPosition = data.first?.items.first?.id
                 }
                 .scrollIndicatorsFlash(trigger: flashScrollView)
                 
-                //
-                
             }
-            //                .scrollPosition(id: $scrollPosition, anchor: .bottom)
-            
-            //            Button("Scroll to top") {
-            ////                    value.scrollTo(data.first?.items.first?.id)
-            ////                scrollPosition = data.first?.items.first?.id
-            //                                        scrollPosition = data.last?.items.last?.id
-            //
-            //            }
-            
             
             Text(section)
                 .font(.largeTitle)
                 .shadow(radius: 4)
                 .foregroundColor(.white)
                 .padding()
+            
+        }.task {
+            var sections = [SomeSection]()
+            for i in 0..<1_000 { /// Number of sections
+                let newData = SomeSection(id: UUID(), title: "Section \(i)", items: createData())
+                sections.append(newData)
+            }
+            await MainActor.run {
+                self.data =  sections
+            }
+            
         }
         
+    }
+    
+    static var num = 0
+    func createData() -> [SomeObject] {
+        var data = [SomeObject]()
+        for _ in 0..<250 { /// Number of items in sections
+            data.append(SomeObject(id: UUID(), text: "Text \(Self.num)", color: Color.random))
+            Self.num += 1
+        }
+        return data
     }
     
     struct SomeSection: Identifiable, Equatable {
@@ -100,4 +96,15 @@ struct ColorsInMemeoryView: View {
 
 #Preview {
     ColorsInMemeoryView()
+}
+
+
+extension Color {
+    static var random: Color {
+        return Color(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1)
+        )
+    }
 }
