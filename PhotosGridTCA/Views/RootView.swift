@@ -25,7 +25,7 @@ struct RootView: View {
                         })
                     }
                 
-                Section(header: Text("Demonstrate smooth scrolling across a library sectioned by months, leveraging the lazy-loading capabilities of PHFetchResult for efficient memory management.")
+                Section(header: Text("Demonstrate smooth scrolling across a library sectioned by months, leveraging the lazy-loading capabilities of PHFetchResult for efficient memory management. inspired by Apple")
                     .font(.caption2)) {
                         NavigationLink(destination: {
                             SectionCollectionView()

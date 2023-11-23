@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SectionCollectionView: View {
-    @StateObject var sectionCollection : SectionCollection = SectionCollection(smartAlbum: .smartAlbumUserLibrary) /// Represents the entire photo library.
+    @StateObject var viewModel: PhotoCollectionViewModel = PhotoCollectionViewModel(smartAlbum: .smartAlbumUserLibrary) /// Represents the entire photo library.
     
     @Environment(\.displayScale) private var displayScale
         
@@ -28,14 +28,14 @@ struct SectionCollectionView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: Self.itemSpacing, pinnedViews: [.sectionHeaders]) {
                 
-                ForEach(sectionCollection.photoSectioned) { section in
+                ForEach(viewModel.photoSectioned) { section in
                     
                     Section(header: Text("\(section.month) - \(section.year)")) {
                         
                         ForEach(section.fetchResult) { asset in
                          
                             NavigationLink {
-                                PhotoView(asset: asset, cache: sectionCollection.cache)
+                                PhotoView(asset: asset, cache: viewModel.cache)
                             } label: {
                                 photoItemView(asset: asset)
                             }
@@ -53,7 +53,7 @@ struct SectionCollectionView: View {
         .statusBar(hidden: false)
         .task({
             do {
-                try await sectionCollection.load()
+                try await viewModel.load()
             } catch {
                 print("error:\(error)")
             }
@@ -61,7 +61,7 @@ struct SectionCollectionView: View {
     }
     
     private func photoItemView(asset: PhotoAsset) -> some View {
-        PhotoItemView(asset: asset, cache: sectionCollection.cache, imageSize: imageSize)
+        PhotoItemView(asset: asset, cache: viewModel.cache, imageSize: imageSize)
 //            .frame(width: Self.itemSize.width, height: Self.itemSize.height)
             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
             .aspectRatio(1, contentMode: .fill)
@@ -78,12 +78,12 @@ struct SectionCollectionView: View {
             }
             .onAppear {
                 Task {
-                    await sectionCollection.cache.startCaching(for: [asset], targetSize: imageSize)
+                    await viewModel.cache.startCaching(for: [asset], targetSize: imageSize)
                 }
             }
             .onDisappear {
                 Task {
-                    await sectionCollection.cache.stopCaching(for: [asset], targetSize: imageSize)
+                    await viewModel.cache.stopCaching(for: [asset], targetSize: imageSize)
                 }
             }
     }

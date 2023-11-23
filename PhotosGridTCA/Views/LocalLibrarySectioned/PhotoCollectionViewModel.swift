@@ -1,5 +1,5 @@
 //
-//  SectionCollection.swift
+//  PhotoCollectionViewModel.swift
 //  PhotosGridTCA
 //
 //  Created by Guy Cohen on 19/11/2023.
@@ -9,7 +9,7 @@ import Foundation
 import Photos
 import os.log
 
-class SectionCollection: NSObject, ObservableObject {
+final class PhotoCollectionViewModel: NSObject, ObservableObject {
     
     @Published var photoSectioned: [PhotoSectioned] = [PhotoSectioned]()
     
@@ -165,7 +165,7 @@ class SectionCollection: NSObject, ObservableObject {
     
 }
 
-extension SectionCollection: PHPhotoLibraryChangeObserver {
+extension PhotoCollectionViewModel: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) { // TODO: update the library when changes happen
 //        Task { @MainActor in
