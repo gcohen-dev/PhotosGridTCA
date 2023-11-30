@@ -28,17 +28,14 @@ struct PaginationDynamicAddingView: View {
                                         .foregroundStyle(.red)
                                         .frame(width: 120, height: 120)
                                         .background(.black)
-                                        .scrollTargetLayout()
-                                        .id(row)
-                                    
                                 }
                             }, header: {
                                 Text(sectionRow.header)
                                     .foregroundStyle(.black)
                                     .padding(25)
                                     .background(Color.white)
-                                    .scrollTargetLayout()
                                     .id(sectionRow)
+                                    .scrollTargetLayout()
                             })
                         }
                     }
@@ -46,7 +43,6 @@ struct PaginationDynamicAddingView: View {
             }
             .scrollIndicators(.never)
             .scrollPosition(id: $dataManager.currentSection)
-            .scrollPosition(id: $dataManager.currentItem)
             HStack {
                 Spacer()
                 CustomScrubber(onScrub: { percentage in
@@ -74,7 +70,7 @@ extension PaginationDynamicAddingView {
         //        @Published var sections: [Int: SectionData] = [:]
         @Published var isScrubberInUsed = false
         @Published var currentSectionId: String = "0"
-        @Published var currentItem: MyData?
+//        @Published var currentItem: MyData?
         @Published var currentSection: SectionData?
         
         /// Represent the partial of the data, all sections will be here and also the first and last 20 items of each section
@@ -131,51 +127,12 @@ extension PaginationDynamicAddingView {
         func onDisappear() {
             Self._onGoingCounter = 0
         }
-        
-        func loadEntireSectionIfNeeded(currentSection: SectionData, row: MyData) {
-            
-            //            guard !isScrubberInUsed else { // Disable while scrubbering
-            //                return
-            //            }
-            //
-            //            if currentSection.isSectionLoaded {
-            //                return
-            //            }
-            //
-            //            if currentSection.data.isEmpty {
-            //                return
-            //            }
-            //
-            //            let middleCell = currentSection.data.count / 2
-            //
-            //            if currentSection.data[middleCell].id != row.id {
-            //                return
-            //            }
-            //            print("### Loading entire section:\(currentSection.header)")
-            //
-            //            guard let underlinedSection = _underlinedData[currentSection.id] else {
-            //                assertionFailure("No section has been found, something funky is going on.")
-            //                return
-            //            }
-            //
-            //            if (currentSection.data.count == underlinedSection.data.count) { // We loaded everything
-            //                print("### Section \(currentSection.header) loaded everything")
-            //                return
-            //            }
-            //
-            //            guard let indexSection = self.sections.firstIndex(of: currentSection) else {
-            //                assertionFailure("No index has been found, something funky is going on.")
-            //                return
-            //            }
-            //
-            //            sections[indexSection].isSectionLoaded = true
-            //
-            //            self.sections[indexSection].data = underlinedSection.data
-        }
+
         
         func scrubberTouched(percentage: CGFloat) {
 
             snapshotOfData = [SectionData]()
+            currentSection = nil
             
             let sectionTarget = Int(percentage * CGFloat(_underlinedData.count - 1))
             let selectedSection = _underlinedData[sectionTarget]
@@ -205,23 +162,23 @@ extension PaginationDynamicAddingView {
             var sectionIndex = sectionTarget - 1
             var currentSectionCount = selectedSection?.data.count ?? 0
             
-            var itemToTriggerBackwardSectionLoading: MyData?
+//            var itemToTriggerBackwardSectionLoading: MyData?
             
             while(sectionIndex >= 0 && currentSectionCount < limitOfPhotos) {
                 let priorSection = self._underlinedData[sectionIndex]
                 currentSectionCount += priorSection?.data.count ?? 0
                 sectionsToAdd.insert(priorSection!, at: 0)
                 sectionIndex -= 1
-                itemToTriggerBackwardSectionLoading = priorSection?.data.first
+//                itemToTriggerBackwardSectionLoading = priorSection?.data.first
             }
             
-            self.itemToTriggerBackwardSectionLoading = itemToTriggerBackwardSectionLoading
+//            self.itemToTriggerBackwardSectionLoading = itemToTriggerBackwardSectionLoading
             
             // TODO: we need to add logic of loading forward as well, but for now let's keep it simple
             //            withAnimation {
             //                DispatchQueue.main.async {
-            
             self.snapshotOfData = sectionsToAdd
+            
             self.currentSection = selectedSection!
             
             self.isScrubberInUsed = false
