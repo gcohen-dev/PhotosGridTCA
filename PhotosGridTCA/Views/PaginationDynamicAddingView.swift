@@ -94,7 +94,7 @@ extension PaginationDynamicAddingView {
             
             var orderedSection = [SectionData]()
             var sectionNumber = 0
-            for _ in 0...1199 { // 1199 Sections = 12 month * 100 Years.
+            for _ in 0...300 { // 1199 Sections = 12 month * 100 Years.
                 let section = generateUnderlineData()
                 orderedSection.append(section)
                 /// Generating SQL database here
