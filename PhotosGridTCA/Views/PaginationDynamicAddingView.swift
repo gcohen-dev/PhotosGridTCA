@@ -100,6 +100,11 @@ extension PaginationDynamicAddingView {
                 /// Generating SQL database here
                 _underlinedData[sectionNumber] = section
                 
+                if section.data.count > Self.itemsPerSectionThershould {
+//                    section.isSectionLoaded = true
+                    loadedSectionSnapshot.insert(section.id)
+                }
+                
                 // Representive
                 let data = section.data.prefix(Self.itemsPerSectionThershould)
                 var sectionWithSubSequenceData = section
@@ -168,73 +173,79 @@ extension PaginationDynamicAddingView {
         
         func itemAppeared(item: MyData,section: SectionData) {
             print("section:\(section.sectionNumber), row:\(item.number)")
-            guard isScrubberInUsed == false else {
-                return
-            }
-            
-            if section.isSectionLoaded {
-                // We are loading here the upcoming section
-                let nextSection = section.sectionNumber + 1
-                
-                if let getNextSection = _underlinedData[nextSection] {
-                    if loadedSection.contains(getNextSection.id) {
-                        return
-                    }
-                    loadedSection.insert(getNextSection.id)
-                    loadedSectionSnapshot.insert(getNextSection.id)
-                    var nxtSection = getNextSection
-                    nxtSection.isSectionLoaded = true
-                    /// This code shouldn't be on production, we should not filter on the dataToLoad.
-                    if let dataFound = dataToLoad.first(where: { $0.id == nxtSection.id}) {
-                        print(dataFound)
-                        return // Already loaded
-                    } else {
-                        dataToLoad.append(nxtSection)
-                        print("Loading Next Section: \(nxtSection.sectionNumber)")
-                    }
-                }
-
-            } else {
-
-                let allSectionDataCountItemIndexDiff = Self.itemsPerSectionThershould - item.index
-                
-                if allSectionDataCountItemIndexDiff <= itemsToTriggerFullSectionLoading {
-                    
-                    guard var currentSection = self._underlinedData[section.sectionNumber] else {
-                        return
-                    }
-                    
-                    if loadedSection.contains(currentSection.id) {
-                        return
-                    }
-
-                    print("Loading Full section: \(currentSection.sectionNumber)")
-                    currentSection.isSectionLoaded = true
-                    loadedSection.insert(currentSection.id)
-                    if let index = dataToLoad.firstIndex(where: { $0.id == section.id }) {
-                        dataToLoad[index] = currentSection
-                    }
-                }
-            }
+//            guard isScrubberInUsed == false else {
+//                return
+//            }
+//            
+//            
+//            if loadedSection.contains(section.id) {
+//               // Section Loaded
+//                
+//                // We are loading here the upcoming section
+//                let nextSection = section.sectionNumber + 1
+//                
+//                guard let getNextSection = _underlinedData[nextSection] else {
+//                    return
+//                }
+//                
+//                if loadedSection.contains(getNextSection.id) {
+//                    return
+//                }
+//                loadedSection.insert(getNextSection.id)
+//                var nxtSection = getNextSection
+//                
+//                /// This code shouldn't be on production, we should not filter on the dataToLoad.
+//                if let dataFound = dataToLoad.first(where: { $0.id == nxtSection.id}) {
+//                    print("Data is found -> Bad behavior: \(dataFound)")
+//                    return // Already loaded
+//                } else {
+//                    dataToLoad.append(nxtSection)
+//                    print("Loading Next Section: \(nxtSection.sectionNumber)")
+//                }
+//            } else {
+//                // load section
+//                    
+//                guard var currentSection = self._underlinedData[section.sectionNumber] else {
+//                    return
+//                }
+//                    
+//                if loadedSection.contains(currentSection.id) {
+//                    print("we should not be here !!!")
+//                    return
+//                }
+//
+//                print("Loading Full section: \(currentSection.sectionNumber)")
+//                loadedSection.insert(currentSection.id)
+//                if let index = dataToLoad.firstIndex(where: { $0.id == section.id }) {
+//                    dataToLoad[index] = currentSection
+//                }
+//            }
             
         }
 
+        var debounce = Debounce(delay: 0.050)
         
         func scrubberTouched(percentage: CGFloat) {
             
             if !isScrubberInUsed {
                 isScrubberInUsed = true
+                loadedSection = []
+                currentSection = nil
+                dataToLoad = [SectionData]()
             }
             
             // Clean the current count
 //            dataToLoad = [SectionData]()
-            currentSection = nil
-            loadedSection = []
             
-            let sectionTarget = Int(percentage * CGFloat(representiveDataSnapshot.count - 1))
-            let selectedSection = representiveDataSnapshot[sectionTarget]
-//            self.dataToLoad = [selectedSection!]
-            self.dataToLoad = [selectedSection!]
+            
+//            debounce.callback = { [weak self] in
+//                guard let self else { return }
+                let sectionTarget = Int(percentage * CGFloat(representiveDataSnapshot.count - 1))
+                let selectedSection = representiveDataSnapshot[sectionTarget]
+                self.dataToLoad = [selectedSection!]
+                currentSection = selectedSection!
+//            }
+//            debounce.call()
             
         }
 
@@ -244,33 +255,41 @@ extension PaginationDynamicAddingView {
             
             loadedSection = loadedSectionSnapshot
             
-            let sectionTarget = Int(percentage * CGFloat(self.representiveDataSnapshot.count - 1))
             
-            let selectedSection = self.representiveDataSnapshot[sectionTarget]
+            guard let ss = self.dataToLoad.first else {
+                
+                return
+            }
+            
+            
+//            let sectionTarget = Int(percentage * CGFloat(self.representiveDataSnapshot.count - 1))
+            
             
             var sectionsToAdd = [SectionData]()
-            sectionsToAdd.append(selectedSection!)
-            self.loadedSection.insert(selectedSection!.id)
+//            sectionsToAdd.append(ss)
+//            self.loadedSection.insert(selectedSection!.id)
             
             let limitOfPhotosPerPriorSection = 50
-            var priorSectionIndex = sectionTarget - 1
+            
+            var priorSectionIndex = ss.sectionNumber - 1
             var priorSectionPhotosCount = 0
-            
-            
+//            
+//            
             while(priorSectionIndex >= 0 && priorSectionPhotosCount < limitOfPhotosPerPriorSection) {
                 var priorSection = self._underlinedData[priorSectionIndex]
-                priorSection?.isSectionLoaded = true // Important!  We are fully loading the prior section
+//                priorSection?.isSectionLoaded = true // Important!  We are fully loading the prior section
                 self.loadedSection.insert(priorSection!.id)
                 priorSectionPhotosCount += priorSection?.data.count ?? 0
                 sectionsToAdd.insert(priorSection!, at: 0)
                 priorSectionIndex -= 1
             }
-            
-//            self.itemToTriggerBackwardSectionLoading = itemToTriggerBackwardSectionLoading
-            
-            self.dataToLoad = sectionsToAdd
-            
-            self.currentSection = selectedSection!
+//            
+////            self.itemToTriggerBackwardSectionLoading = itemToTriggerBackwardSectionLoading
+//            
+//            self.dataToLoad = sectionsToAdd
+            self.dataToLoad.insert(contentsOf: sectionsToAdd, at: 0)
+
+            currentSection = self.dataToLoad.last
             
             self.isScrubberInUsed = false
             
@@ -303,4 +322,79 @@ struct MyData: Identifiable, Hashable, Equatable {
     
     func hash(into hasher: inout Hasher) { hasher.combine(number) }
     
+}
+
+
+
+
+class Debounce {
+
+    public var callback: (() -> ())?
+    
+    /// Delay Time in seconds
+    private let delay: TimeInterval
+    
+    /// Timer to fire the callback event
+    private var timer: DispatchSourceTimer?
+    
+    public var callerQueue: DispatchQueue
+    
+    /// Start the debouncer
+    ///
+    public func call() {
+        let isMainThread = Thread.current == Thread.main
+        
+        /// Using barrier to avoid possible crash on concurrent queues
+        /// On serial queues this flag has no effect
+        callerQueue.async(flags: .barrier) { [weak self] in self?.setupCallback(isMainThread: isMainThread) }
+    }
+    
+    /// Init with delay time as argument, callback can be set later
+    ///
+    /// - Parameters:
+    ///   - delay: delay in seconds
+    ///   - dispatchQueue: the thread we should retrieve our callback
+    public init(delay: TimeInterval){
+        self.delay = delay
+        self.callerQueue = DispatchQueue(label: "sfg.debounce.serial")
+    }
+
+    /// Init with delay time and callback as arguments
+    ///
+    /// - Parameters:
+    ///   - delay: delay in seconds
+    ///   - dispatchQueue: the thread we should retrieve our callback
+    ///   - callback: the call back that should be invoked
+    public init(delay: TimeInterval, callerQueue:DispatchQueue? = nil, callback: (() -> ())? = nil){
+        self.delay = delay
+        self.callback = callback
+        self.callerQueue = callerQueue ?? DispatchQueue(label: "sfg.debounce.serial")
+    }
+    
+    private func setupCallback(isMainThread: Bool) {
+        /// Cancel timer, if already running
+        timer?.setEventHandler(handler: nil)
+        timer?.cancel()
+        /// If we do not have a callback we should not schedule anything
+        guard callback != nil else { return }
+        
+        /// Reset timer to fire next event
+        timer = DispatchSource.makeTimerSource(queue: callerQueue)
+        timer?.schedule(deadline: .now() + delay)
+        
+        /// If custom queue provided and it is concurrent - barrier flag ensure that any code
+        /// will be exucuted before or after event handler, not in same time
+        ///
+        /// If custom queue is serial or we use default queue - barrier has no effect
+        timer?.setEventHandler(flags: .barrier, handler: { [weak self] in
+            if isMainThread {
+                DispatchQueue.main.async {
+                    self?.callback?()
+                }
+            } else {
+                self?.callback?()
+            }
+        })
+        timer?.resume()
+    }
 }
