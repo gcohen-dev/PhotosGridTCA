@@ -14,6 +14,13 @@ struct PaginationDynamicAddingView: View {
     
     let columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 3)
 
+    // Important ! Until now I had the assumpation of changing the data while the scrubbing is changing
+    // but this concept is completely wrong, we should not change the data according to the scrubber pace
+    // or according to @State refresh rate
+    // we should update it efficiently with debounce and dispatch,
+    
+    @State private var lastScrollOffset: CGFloat = 0
+    @State private var currentScrollOffset: CGFloat = 0
     
     var body: some View {
         ZStack {
@@ -38,12 +45,36 @@ struct PaginationDynamicAddingView: View {
                                 .background(Color.white)
                                 .id(sectionRow)
                                 .scrollTargetLayout()
+                                .onAppear()
                         })
                     }
                 }
+                .background(GeometryReader { geometry in
+                               Color.clear.preference(key: ViewOffsetKey.self, value: geometry.frame(in: .named("scrollView")).minY)
+                           })
             }
+            
             .scrollIndicators(.never)
             .scrollPosition(id: $viewModel.currentSection)
+            .coordinateSpace(name: "scrollView")
+                 .onPreferenceChange(ViewOffsetKey.self) { value in
+                     self.currentScrollOffset = value
+                     if self.currentScrollOffset > self.lastScrollOffset {
+                         print("Scrolling Up")
+                             // TODO: Doria stop from working and apply change here
+                     } else if self.currentScrollOffset < self.lastScrollOffset {
+                         print("Scrolling Down")
+                         // TODO: Doria stop from working and apply change here
+                     }
+                     self.lastScrollOffset = self.currentScrollOffset
+                 }
+            
+            Text(viewModel.currentSection?.header ?? "")
+                .foregroundStyle(.black)
+                .padding(25)
+                .background(Color.white)
+                
+                
             HStack {
                 Spacer()
                 CustomScrubber(onScrub: { percentage in
@@ -52,9 +83,32 @@ struct PaginationDynamicAddingView: View {
                     viewModel.scrubberTouchedEnded(percentage: percentage)
                 })
             }
-        }.onDisappear(perform: viewModel.onDisappear)
+        }
+        .onDisappear(perform: viewModel.onDisappear)
+        .navigationBarItems(trailing:
+                        Button(action: {
+            viewModel.buttonTapped()
+                        }) {
+                            Text("add prior")
+                        }
+                    )
+        .navigationBarItems(leading:
+                        Button(action: {
+            viewModel.addFurther()
+                        }) {
+                            Text("add further")
+                        }
+                    )
     }
 
+}
+
+struct ViewOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value += nextValue()
+    }
 }
 
 // MARK: Preview
@@ -94,13 +148,13 @@ extension PaginationDynamicAddingView {
             var orderedSection = [SectionData]()
             var sectionNumber = 0
             representiveDataSnapshot = [Int: SectionData]()
-            for _ in 0...1199 { // 1199 Sections = 12 month * 100 Years.
+            for _ in 0...600 { // 1199 Sections = 12 month * 100 Years.
                 let section = generateUnderlineData()
                 orderedSection.append(section)
                 /// Generating SQL database here
                 _underlinedData[sectionNumber] = section
                 
-                if section.data.count > Self.itemsPerSectionThershould {
+                if section.data.count < Self.itemsPerSectionThershould {
 //                    section.isSectionLoaded = true
                     loadedSectionSnapshot.insert(section.id)
                 }
@@ -142,7 +196,7 @@ extension PaginationDynamicAddingView {
         private static var sectionNumber = 0
         private func generateUnderlineData() -> SectionData {
             let currentSectionNumber = Self.sectionNumber
-            let randomSectionItems = Int.random(in: 20...800) // Generate random row for each section
+            let randomSectionItems = Int.random(in: 20...100) // Generate random row for each section
             var myDataArr = [MyData]()
             for index in 0...randomSectionItems {
                 let data = MyData(id: UUID().uuidString, number: Self._onGoingCounter, index: index)
@@ -171,87 +225,142 @@ extension PaginationDynamicAddingView {
         
         let itemsToTriggerFullSectionLoading = 5
         
+        func buttonTapped() {
+            guard let firstSection = dataToLoad.first else {
+                return
+            }
+            
+            let priorSection = firstSection.sectionNumber - 1
+            guard let prSection = _underlinedData[priorSection] else {
+                return
+            }
+            
+            let currentSectionDisplayed = firstSection
+            
+            let data = [prSection] + self.dataToLoad
+            
+//            self.dataToLoad.insert(prSection, at: 0)
+            self.dataToLoad = data
+            
+            
+            self.currentSection = currentSectionDisplayed
+            
+            
+        }
+        
+        func addFurther() {
+            guard let lastSection = dataToLoad.last else {
+                return
+            }
+            
+            let priorSection = lastSection.sectionNumber + 1
+            guard let prSection = _underlinedData[priorSection] else {
+                return
+            }
+            
+            let currentSectionDisplayed = lastSection
+            
+            
+//            self.dataToLoad.insert(prSection, at: 0)
+            self.dataToLoad.append(prSection)
+            
+            
+        }
+        
         func itemAppeared(item: MyData,section: SectionData) {
-            print("section:\(section.sectionNumber), row:\(item.number)")
-//            guard isScrubberInUsed == false else {
+            
+//            guard disableItemAppeared == false else {
+//                print("Disabled section:\(section.sectionNumber), row:\(item.number)")
 //                return
 //            }
 //            
+//            guard isScrubberInUsed == false else {
+//                print("isScrubberInUsed section:\(section.sectionNumber), row:\(item.number)")
+//                return
+//            }
 //            
-//            if loadedSection.contains(section.id) {
-//               // Section Loaded
-//                
-//                // We are loading here the upcoming section
+//            print("section:\(section.sectionNumber), row:\(item.number)")
+//            
+//                /// Rules
+//            /// first to check if we are in index 0 so there is no need to load backwards
+//            /// Thencheck if we have loaded the full section we are currently in
+//            ///
+//            
+//            if section.data.last?.id == item.id {
+//                // Load the upcoming sections
 //                let nextSection = section.sectionNumber + 1
-//                
-//                guard let getNextSection = _underlinedData[nextSection] else {
-//                    return
-//                }
-//                
-//                if loadedSection.contains(getNextSection.id) {
-//                    return
-//                }
-//                loadedSection.insert(getNextSection.id)
-//                var nxtSection = getNextSection
-//                
-//                /// This code shouldn't be on production, we should not filter on the dataToLoad.
-//                if let dataFound = dataToLoad.first(where: { $0.id == nxtSection.id}) {
-//                    print("Data is found -> Bad behavior: \(dataFound)")
-//                    return // Already loaded
-//                } else {
-//                    dataToLoad.append(nxtSection)
-//                    print("Loading Next Section: \(nxtSection.sectionNumber)")
-//                }
-//            } else {
-//                // load section
+//                if let getNextSection = _underlinedData[nextSection], loadedSection.contains(getNextSection.id) == false  {
 //                    
-//                guard var currentSection = self._underlinedData[section.sectionNumber] else {
-//                    return
-//                }
+//                    loadedSection.insert(getNextSection.id)
+//                    var nxtSection = getNextSection
 //                    
-//                if loadedSection.contains(currentSection.id) {
-//                    print("we should not be here !!!")
-//                    return
+//                    /// This code shouldn't be on production, we should not filter on the dataToLoad.
+//                    if let dataFound = dataToLoad.first(where: { $0.id == nxtSection.id}) {
+//                        print("Nxt: Data is found -> Bad behavior")
+//                        return // Already loaded
+//                    } else {
+//                        dataToLoad.append(nxtSection)
+//                        print("Loading Next Section: \(nxtSection.sectionNumber)")
+//                    }
 //                }
+//            }
+//            
 //
-//                print("Loading Full section: \(currentSection.sectionNumber)")
-//                loadedSection.insert(currentSection.id)
-//                if let index = dataToLoad.firstIndex(where: { $0.id == section.id }) {
-//                    dataToLoad[index] = currentSection
+//            if section.data.first?.id == item.id {
+//                // load the prior section
+//                let priorSection = section.sectionNumber - 1
+//                
+//                if let getPriorSection = _underlinedData[priorSection] {
+//                    if loadedSection.contains(getPriorSection.id) {
+//                        print("Prior section has been loaded already")
+//                        return
+//                    }
+//                    loadedSection.insert(getPriorSection.id)
+//                    var prvSection = getPriorSection
+//                    /// This code shouldn't be on production, we should not filter on the dataToLoad.
+//                    if let dataFound = dataToLoad.first(where: { $0.id == prvSection.id}) {
+//                        print("Prior: Data is found -> Bad behavior")
+//                        return // Already loaded
+//                    } else {
+//                        dataToLoad.insert(prvSection, at: 0)
+//                        print("Loading Prior Section: \(prvSection.sectionNumber)")
+//                    }
 //                }
 //            }
             
         }
 
-        var debounce = Debounce(delay: 0.050)
+        var debounce = Debounce(delay: 0.005)
         
         func scrubberTouched(percentage: CGFloat) {
-            
-            if !isScrubberInUsed {
-                isScrubberInUsed = true
-                loadedSection = []
-                currentSection = nil
-                dataToLoad = [SectionData]()
-            }
-            
-            // Clean the current count
-//            dataToLoad = [SectionData]()
-            
-            
-//            debounce.callback = { [weak self] in
-//                guard let self else { return }
-                let sectionTarget = Int(percentage * CGFloat(representiveDataSnapshot.count - 1))
-                let selectedSection = representiveDataSnapshot[sectionTarget]
+            self.dataToLoad = [SectionData]()
+            debounce.callback = { [weak self] in
+                guard let self = self else { return }
+                if !self.isScrubberInUsed {
+                    self.isScrubberInUsed = true
+                    self.loadedSection = []
+//                    self.dataToLoad = [SectionData]()
+                }
+                self.currentSection = nil
+                 
+                let sectionTarget = Int(percentage * CGFloat(self.representiveDataSnapshot.count - 1))
+                let selectedSection = self.representiveDataSnapshot[sectionTarget]
+                if selectedSection?.id == self.dataToLoad.first?.id {
+                    print("Scrubber touche same section")
+                    return
+                }
                 self.dataToLoad = [selectedSection!]
-                currentSection = selectedSection!
-//            }
-//            debounce.call()
-            
+    
+            }
+           
+            debounce.call()
         }
 
-        
+        var disableItemAppeared = false
         
         func scrubberTouchedEnded(percentage: CGFloat) {
+            
+            disableItemAppeared = true
             
             loadedSection = loadedSectionSnapshot
             
@@ -262,12 +371,7 @@ extension PaginationDynamicAddingView {
             }
             
             
-//            let sectionTarget = Int(percentage * CGFloat(self.representiveDataSnapshot.count - 1))
-            
-            
             var sectionsToAdd = [SectionData]()
-//            sectionsToAdd.append(ss)
-//            self.loadedSection.insert(selectedSection!.id)
             
             let limitOfPhotosPerPriorSection = 50
             
@@ -275,6 +379,7 @@ extension PaginationDynamicAddingView {
             var priorSectionPhotosCount = 0
 //            
 //            
+            /// Here we are FULLY loading sections prior to the current section, we should consider loading enough sections so the iteamAppeared will naturally work
             while(priorSectionIndex >= 0 && priorSectionPhotosCount < limitOfPhotosPerPriorSection) {
                 var priorSection = self._underlinedData[priorSectionIndex]
 //                priorSection?.isSectionLoaded = true // Important!  We are fully loading the prior section
@@ -283,16 +388,33 @@ extension PaginationDynamicAddingView {
                 sectionsToAdd.insert(priorSection!, at: 0)
                 priorSectionIndex -= 1
             }
-//            
-////            self.itemToTriggerBackwardSectionLoading = itemToTriggerBackwardSectionLoading
-//            
-//            self.dataToLoad = sectionsToAdd
+
             self.dataToLoad.insert(contentsOf: sectionsToAdd, at: 0)
 
-            currentSection = self.dataToLoad.last
+            currentSection = ss
             
             self.isScrubberInUsed = false
             
+            // Simulate loading the whole object
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                if self.isScrubberInUsed == true {
+                    print("Attempting to load current section")
+                    return
+                }
+                
+                guard let currentSection = self._underlinedData[ss.sectionNumber] else {
+                    print("Presented section not found")
+                    return
+                }
+                
+                if let index = self.dataToLoad.firstIndex(where: { $0.id == currentSection.id }) {
+                    print("Loading the whole current section after scrubbing")
+                    self.loadedSection.insert(currentSection.id)
+                    self.dataToLoad[index] = currentSection // TODO: if current section is small load the next objects
+                }
+                
+                self.disableItemAppeared =  false
+            }
         }
         
     }
